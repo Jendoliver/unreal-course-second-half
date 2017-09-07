@@ -76,3 +76,6 @@ DerivedDataCache/*
 
 # Textures
 Content/Textures/*
+
+# Images
+Content/Images/*
