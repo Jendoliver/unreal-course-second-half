@@ -24,7 +24,7 @@ ATank* ATankAIController::GetControlledTank() const
 
 ATank * ATankAIController::GetPlayerTank() const
 {
-	ATank* PlayerPawn = Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetControlledPawn());
+	ATank* PlayerPawn = Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	if (PlayerPawn)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Got the PlayerControllerTank! %s"), *(PlayerPawn->GetName()))
