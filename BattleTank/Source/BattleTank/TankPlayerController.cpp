@@ -41,9 +41,47 @@ void ATankPlayerController::AimTowardsCrosshair()
 
 bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) const
 {
-	// Trace line projection from 2D crosshair to 3D world (Get screen location to world)
-	// If it hits the landscape
-		// OutHitLocation = Hit
-		// return true
+	// Find the crosshair position
+	int32 ViewportSizeX, ViewportSizeY;
+	GetViewportSize(ViewportSizeX, ViewportSizeY);
+	FVector2D ScreenLocation = FVector2D(ViewportSizeX * CrossHairXLocation, ViewportSizeY * CrossHairYLocation);
+	FVector LookDirection;
+
+	if (GetLookDirection(ScreenLocation, LookDirection))
+	{
+		// Line trace along LookDirection
+		GetLookVectorHitLocation(LookDirection, OutHitLocation);
+		UE_LOG(LogTemp, Warning, TEXT("Hit Location: %s"), *OutHitLocation.ToString());
+		// If it hits the landscape
+			// OutHitLocation = Hit
+			// return true
+	}
+	OutHitLocation = FVector(0);
+	return false;
+}
+
+bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector& OutLookDirection) const
+{
+	FVector WorldDirection, WorldLocation;
+	return DeprojectScreenPositionToWorld(
+		ScreenLocation.X, 
+		ScreenLocation.Y, 
+		WorldLocation,
+		WorldDirection
+	);
+}
+
+bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVector& OutHitLocation) const
+{
+	FHitResult OutHitResult;
+	FVector StartLocation = PlayerCameraManager->GetCameraLocation(); // Very important not to take the tank as the start, since it's the camera!
+	FVector EndLocation = StartLocation + LookDirection * LineTraceRange;
+
+	if (GetWorld()->LineTraceSingleByChannel(OutHitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility))
+	{
+		OutHitLocation = OutHitResult.Location;
+		return true;
+	}
+	OutHitLocation = FVector(0);
 	return false;
 }
