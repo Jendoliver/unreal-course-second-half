@@ -24,6 +24,8 @@ class BATTLETANK_API ATankPlayerController : public APlayerController
 		UPROPERTY(EditAnywhere)
 		float LineTraceRange = 1000000; // UE4 is in centimeters!
 
+		ATank* ControlledTank = nullptr;
+
 		ATank* GetControlledTank() const;
 		void AimTowardsCrosshair(); // Start the tank moving the barrel so that a shot would hit at crosshair
 		bool GetSightRayHitLocation(FVector& OutHitLocation) const;

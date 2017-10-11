@@ -6,22 +6,25 @@
 void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	ATank* ControlledTank = GetControlledTank();
+	ControlledTank = GetControlledTank();
 }
 
 void ATankPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	AimTowardsCrosshair();
+	if (ControlledTank)
+	{
+		AimTowardsCrosshair();
+	}
 }
 
 ATank* ATankPlayerController::GetControlledTank() const
 {
-	ATank* ControlledTank = Cast<ATank>(GetPawn());
-	if (ControlledTank)
+	ATank* NewControlledTank = Cast<ATank>(GetPawn());
+	if (NewControlledTank)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("TankPlayerController is controlling the pawn %s"), *(ControlledTank->GetName()))
-		return ControlledTank;
+		UE_LOG(LogTemp, Warning, TEXT("TankPlayerController is controlling the pawn %s"), *(NewControlledTank->GetName()))
+		return NewControlledTank;
 	}
 	UE_LOG(LogTemp, Error, TEXT("TankPlayerController can't get the ATank* ControlledTank"))
 	return nullptr;
@@ -29,13 +32,10 @@ ATank* ATankPlayerController::GetControlledTank() const
 
 void ATankPlayerController::AimTowardsCrosshair()
 {
-	if (!GetControlledTank()) { return; }
-
 	FVector HitLocation; // OUT
 	if (GetSightRayHitLocation(HitLocation)) // has side effect, line traces
 	{
-		UE_LOG(LogTemp, Warning, TEXT("HitLocation: %s"), *HitLocation.ToString())
-		// TODO: Tell controlled tank to aim at this point
+		ControlledTank->AimAt(HitLocation);
 	}
 }
 
@@ -49,12 +49,7 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) cons
 
 	if (GetLookDirection(ScreenLocation, LookDirection))
 	{
-		// Line trace along LookDirection
-		GetLookVectorHitLocation(LookDirection, OutHitLocation);
-		UE_LOG(LogTemp, Warning, TEXT("Hit Location: %s"), *OutHitLocation.ToString());
-		// If it hits the landscape
-			// OutHitLocation = Hit
-			// return true
+		return GetLookVectorHitLocation(LookDirection, OutHitLocation);
 	}
 	OutHitLocation = FVector(0);
 	return false;
@@ -62,12 +57,12 @@ bool ATankPlayerController::GetSightRayHitLocation(FVector& OutHitLocation) cons
 
 bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector& OutLookDirection) const
 {
-	FVector WorldDirection, WorldLocation;
+	FVector WorldLocation;
 	return DeprojectScreenPositionToWorld(
 		ScreenLocation.X, 
 		ScreenLocation.Y, 
 		WorldLocation,
-		WorldDirection
+		OutLookDirection
 	);
 }
 

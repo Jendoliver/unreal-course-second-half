@@ -6,23 +6,34 @@
 void ATankAIController::BeginPlay()
 {
 	Super::BeginPlay();
-	ATank* ControlledTank = GetControlledTank();
-	ATank* PlayerControllerTank = GetPlayerTank();
+	ControlledTank = GetControlledTank();
+	PlayerTank = GetPlayerTank();
+}
+
+void ATankAIController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	if (ControlledTank)
+	{
+		// Move towards the player
+		ControlledTank->AimAt(PlayerTank->GetActorLocation()); // Aim towards the player
+		// Fire if ready
+	}
 }
 
 ATank* ATankAIController::GetControlledTank() const
 {
-	ATank* ControlledTank = Cast<ATank>(GetPawn());
-	if (ControlledTank)
+	ATank* NewControlledTank = Cast<ATank>(GetPawn());
+	if (NewControlledTank)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("TankAIController is controlling the pawn %s"), *(ControlledTank->GetName()))
-			return ControlledTank;
+		UE_LOG(LogTemp, Warning, TEXT("TankAIController is controlling the pawn %s"), *(NewControlledTank->GetName()))
+			return NewControlledTank;
 	}
 	UE_LOG(LogTemp, Error, TEXT("TankAIController can't get the ATank* ControlledTank"))
 		return nullptr;
 }
 
-ATank * ATankAIController::GetPlayerTank() const
+ATank* ATankAIController::GetPlayerTank() const
 {
 	ATank* PlayerPawn = Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
 	if (PlayerPawn)
