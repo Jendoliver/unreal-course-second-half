@@ -12,7 +12,7 @@ ATank::ATank()
 	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component")); // This adds a component to the blueprint which we can see in the editor
 }
 
-void ATank::SetBarrelReference(UStaticMeshComponent* BarrelRef)
+void ATank::SetBarrelReference(UTankBarrel* BarrelRef)
 {
 	TankAimingComponent->SetBarrelReference(BarrelRef);
 }
@@ -40,6 +40,6 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void ATank::AimAt(FVector HitLocation)
 {
-	TankAimingComponent->AimAt(HitLocation);
+	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
 }
 
