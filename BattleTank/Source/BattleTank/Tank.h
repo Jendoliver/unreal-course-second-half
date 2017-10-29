@@ -38,16 +38,16 @@ class BATTLETANK_API ATank : public APawn
 		UTankAimingComponent* TankAimingComponent = nullptr;
 
 	private:	
-		UPROPERTY(EditAnywhere, Category = Firing)
+		UPROPERTY(EditDefaultsOnly, Category = Setup)
+		TSubclassOf<AProjectile> ProjectileBlueprint;
+
+		UPROPERTY(EditDefaultsOnly, Category = Firing)
 		float LaunchSpeed = 10000; // TODO find sensible default
 
-		UPROPERTY(EditAnywhere, Category = Firing)
+		UPROPERTY(EditDefaultsOnly, Category = Firing)
 		float ReloadTimeInSeconds = 3;
 
 		float LastFireTime = 0;
-
-		UPROPERTY(EditAnywhere, Category = Setup)
-		TSubclassOf<AProjectile> ProjectileBlueprint;
 
 		// Local barrel ref to spawn projectile
 		UTankBarrel* Barrel = nullptr;
