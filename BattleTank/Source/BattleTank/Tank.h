@@ -34,6 +34,7 @@ class BATTLETANK_API ATank : public APawn
 		UPROPERTY(EditDefaultsOnly, Category = Setup)
 		TSubclassOf<AProjectile> ProjectileBlueprint;
 
+		// TODO remove when firing is moved to AimingComponent
 		UPROPERTY(EditDefaultsOnly, Category = Firing)
 		float LaunchSpeed = 10000.f;
 
