@@ -6,6 +6,7 @@
 #include "TankPlayerController.generated.h" // Must be the last include
 
 class ATank;
+class UTankAimingComponent;
 
 UCLASS()
 class BATTLETANK_API ATankPlayerController : public APlayerController
@@ -34,6 +35,9 @@ class BATTLETANK_API ATankPlayerController : public APlayerController
 
 		UFUNCTION(BlueprintCallable, Category = "Setup")
 		ATank* GetControlledTank() const;
+
+		UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
+		void FoundAimingComponent(UTankAimingComponent* AimComponentReference); // No need to implement, the parameter is the return type (lol)
 
 	public:
 		// Called every frame

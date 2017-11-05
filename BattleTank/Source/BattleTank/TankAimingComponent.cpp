@@ -11,24 +11,21 @@ UTankAimingComponent::UTankAimingComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 
 	// ...
 }
 
-void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelRef)
+void UTankAimingComponent::Initialise(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet)
 {
-	this->Barrel = BarrelRef;
-}
-
-void UTankAimingComponent::SetTurretReference(UTankTurret* TurretRef)
-{
-	this->Turret = TurretRef;
+	if (!ensure(BarrelToSet && TurretToSet)) { return; }
+	Barrel = BarrelToSet;
+	Turret = TurretToSet;
 }
 
 void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 {
-	if (!Barrel || !Turret) { return; }
+	if (!ensure(Barrel && Turret)) { return; }
 	FVector OutLaunchVelocity;
 	FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
 

@@ -8,7 +8,7 @@
 AProjectile::AProjectile()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(FName("Projectile Movement Component")); // This adds a component to the blueprint which we can see in the editor
 	ProjectileMovementComponent->bAutoActivate = false;
 }
@@ -18,13 +18,6 @@ void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
 	
-}
-
-// Called every frame
-void AProjectile::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
 }
 
 void AProjectile::LaunchProjectile(float Speed)

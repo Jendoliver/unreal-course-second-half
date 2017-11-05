@@ -2,37 +2,25 @@
 
 #include "BattleTank.h"
 #include "Tank.h"
-#include "TankBarrel.h"
-#include "Projectile.h"
 #include "TankAimingComponent.h"
-#include "TankMovementComponent.h"
+#include "Projectile.h"
+#include "TankBarrel.h"
 
 // Sets default values
 ATank::ATank()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
-	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component")); // This adds a component to the blueprint which we can see in the editor
-}
-
-void ATank::SetBarrelReference(UTankBarrel* BarrelRef)
-{
-	TankAimingComponent->SetBarrelReference(BarrelRef);
-	Barrel = BarrelRef;
-}
-
-void ATank::SetTurretReference(UTankTurret* TurretRef)
-{
-	TankAimingComponent->SetTurretReference(TurretRef);
 }
 
 void ATank::Fire()
 {
+	if (!ensure(TankAimingComponent)) { return; }
 	bool isReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
-	if (Barrel && isReloaded)
+	if (isReloaded)
 	{
-		auto SpawnLocation = Barrel->GetSocketLocation(FName("Projectile"));
-		auto SpawnRotation = Barrel->GetSocketRotation(FName("Projectile"));
+		auto SpawnLocation = TankAimingComponent->GetBarrel()->GetSocketLocation(FName("Projectile"));
+		auto SpawnRotation = TankAimingComponent->GetBarrel()->GetSocketRotation(FName("Projectile"));
 		auto Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, SpawnLocation, SpawnRotation);
 		Projectile->LaunchProjectile(LaunchSpeed);
 		LastFireTime = FPlatformTime::Seconds();
@@ -43,18 +31,11 @@ void ATank::Fire()
 void ATank::BeginPlay()
 {
 	Super::BeginPlay();
-	
-}
-
-// Called to bind functionality to input
-void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 }
 
 void ATank::AimAt(FVector HitLocation)
 {
+	if (!ensure(TankAimingComponent)) { return; }
 	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
 }
 
