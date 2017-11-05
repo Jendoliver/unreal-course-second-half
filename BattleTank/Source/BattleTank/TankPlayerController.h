@@ -14,13 +14,13 @@ class BATTLETANK_API ATankPlayerController : public APlayerController
 	
 	private:
 		UPROPERTY(EditDefaultsOnly)
-		float CrossHairXLocation = 0.5;
+		float CrossHairXLocation = 0.5f;
 
 		UPROPERTY(EditDefaultsOnly)
-		float CrossHairYLocation = 0.33333;
+		float CrossHairYLocation = 0.33333f;
 
 		UPROPERTY(EditDefaultsOnly)
-		float LineTraceRange = 1000000; // UE4 is in centimeters!
+		float LineTraceRange = 1000000.f; // UE4 is in centimeters!
 
 		ATank* ControlledTank = nullptr;
 

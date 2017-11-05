@@ -16,6 +16,10 @@ class BATTLETANK_API ATankAIController : public AAIController
 		ATank* ControlledTank = nullptr;
 		ATank* PlayerTank = nullptr;
 
+		// How close to the player can the AI tank drive
+		UPROPERTY(EditDefaultsOnly)
+		float AcceptanceRadius = 3000.f; // TODO check radius is in cm
+
 	protected:
 		virtual void BeginPlay() override;
 		virtual void Tick(float DeltaTime) override;

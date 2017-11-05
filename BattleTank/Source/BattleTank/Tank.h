@@ -46,12 +46,12 @@ class BATTLETANK_API ATank : public APawn
 		TSubclassOf<AProjectile> ProjectileBlueprint;
 
 		UPROPERTY(EditDefaultsOnly, Category = Firing)
-		float LaunchSpeed = 10000; // TODO find sensible default
+		float LaunchSpeed = 10000.f; // TODO find sensible default
 
 		UPROPERTY(EditDefaultsOnly, Category = Firing)
-		float ReloadTimeInSeconds = 3;
+		float ReloadTimeInSeconds = 3.f;
 
-		float LastFireTime = 0;
+		float LastFireTime = 0.f;
 
 		// Local barrel ref to spawn projectile
 		UTankBarrel* Barrel = nullptr;

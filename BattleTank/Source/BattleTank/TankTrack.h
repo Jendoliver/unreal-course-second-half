@@ -20,5 +20,5 @@ public:
 
 	// Max force per track, in Newtons
 	UPROPERTY(EditDefaultsOnly)
-	float TrackMaxDrivingForce = 400000; // Assuming 40TM mass and 10m/s^2 acc
+	float TrackMaxDrivingForce = 400000.f; // Assuming 40TM mass and 10m/s^2 acc
 };
