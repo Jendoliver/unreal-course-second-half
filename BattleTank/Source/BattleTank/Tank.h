@@ -36,6 +36,8 @@ class BATTLETANK_API ATank : public APawn
 	protected:
 		// Called when the game starts or when spawned
 		virtual void BeginPlay() override;
+
+		UPROPERTY(BlueprintReadOnly)
 		UTankAimingComponent* TankAimingComponent = nullptr;
 
 		UPROPERTY(BlueprintReadOnly)
@@ -46,7 +48,7 @@ class BATTLETANK_API ATank : public APawn
 		TSubclassOf<AProjectile> ProjectileBlueprint;
 
 		UPROPERTY(EditDefaultsOnly, Category = Firing)
-		float LaunchSpeed = 10000.f; // TODO find sensible default
+		float LaunchSpeed = 10000.f;
 
 		UPROPERTY(EditDefaultsOnly, Category = Firing)
 		float ReloadTimeInSeconds = 3.f;
