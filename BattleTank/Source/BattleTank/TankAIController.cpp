@@ -23,8 +23,8 @@ void ATankAIController::Tick(float DeltaTime)
 	// Aim towards the player
 	ControlledPawnAimingComponent->AimAt(PlayerPawn->GetActorLocation());
 
-	// TODO FIX Fire if ready
-	// ControlledPawnAimingComponent->Fire();
+	// Fire if ready
+	ControlledPawnAimingComponent->Fire();
 }
 
 
