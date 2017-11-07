@@ -5,7 +5,6 @@
 #include "GameFramework/PlayerController.h"
 #include "TankPlayerController.generated.h" // Must be the last include
 
-class ATank;
 class UTankAimingComponent;
 
 UCLASS()
@@ -23,7 +22,7 @@ class BATTLETANK_API ATankPlayerController : public APlayerController
 		UPROPERTY(EditDefaultsOnly)
 		float LineTraceRange = 1000000.f; // UE4 is in centimeters!
 
-		ATank* ControlledTank = nullptr;
+		UTankAimingComponent* AimingComponent = nullptr;
 
 		void AimTowardsCrosshair(); // Start the tank moving the barrel so that a shot would hit at crosshair
 		bool GetSightRayHitLocation(FVector& OutHitLocation) const;
@@ -32,9 +31,6 @@ class BATTLETANK_API ATankPlayerController : public APlayerController
 
 	protected:
 		virtual void BeginPlay() override;
-
-		UFUNCTION(BlueprintCallable, Category = "Setup")
-		ATank* GetControlledTank() const;
 
 		UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
 		void FoundAimingComponent(UTankAimingComponent* AimComponentReference); // No need to implement, the parameter is the return type (lol)
