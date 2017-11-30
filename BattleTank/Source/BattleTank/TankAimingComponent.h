@@ -9,7 +9,8 @@ UENUM()
 enum class EFiringStatus : uint8
 { 
 	Reloading, 
-	Ready 
+	Aiming,
+	Fixed 
 };
 
 class UTankBarrel;
@@ -24,12 +25,17 @@ class BATTLETANK_API UTankAimingComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UTankAimingComponent();
+	virtual void BeginPlay() override;
+	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;
 
 	// Takes the references for the barrel and the turret
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void Initialise(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet);
 
 	void AimAt(FVector HitLocation);
+
+	inline bool IsBarrelMoving() { return bBarrelMoving; }
+	inline void SetBarrelMoving(bool bBarrelMoving) { this->bBarrelMoving = bBarrelMoving; }
 
 	// Input binded function to fire (used by the player and the AI)
 	UFUNCTION(BlueprintCallable, Category = "Action")
@@ -38,7 +44,7 @@ public:
 protected:
 	// Whether the tank is ready to fire or not, used to draw the reticle
 	UPROPERTY(BlueprintReadOnly, Category = "Firing State")
-	EFiringStatus FiringStatus = EFiringStatus::Ready;
+	EFiringStatus FiringStatus = EFiringStatus::Fixed;
 
 private:
 	UTankBarrel* Barrel = nullptr;
@@ -56,8 +62,12 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
 	float ReloadTimeInSeconds = 3.f;
 
-	float LastFireTime = 1.f;
+	float LastFireTime = 0.f;
 
 	void MoveBarrelTowards(FVector AimDirection);
 	void MoveTurretTowards(FVector AimDirection);
+
+	FVector AimDirection;
+
+	bool bBarrelMoving = false;
 };

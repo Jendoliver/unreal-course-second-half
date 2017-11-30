@@ -3,6 +3,23 @@
 #include "BattleTank.h"
 #include "TankTrack.h"
 
+UTankTrack::UTankTrack()
+{
+	PrimaryComponentTick.bCanEverTick = true;
+}
+
+void UTankTrack::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
+{
+	// Calculate slippage speed
+	auto SlippageSpeed = FVector::DotProduct(GetRightVector(), GetComponentVelocity());
+	// Calculate the required acceleration to correct the slipping
+	auto CorrectionAcceleration = -SlippageSpeed / DeltaTime * GetRightVector();
+	// Calculate the force
+	auto TankRoot = Cast<UStaticMeshComponent>(GetOwner()->GetRootComponent());
+	auto CorrectionForce = TankRoot->GetMass() * CorrectionAcceleration / 2; // There are two tracks
+	TankRoot->AddForce(CorrectionForce);
+}
+
 void UTankTrack::SetTrackThrottle(float Throttle)
 {
 	auto ForceApplied = GetForwardVector() * Throttle * TrackMaxDrivingForce;
