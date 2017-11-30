@@ -25,4 +25,11 @@ public:
 	// Max force per track, in Newtons
 	UPROPERTY(EditDefaultsOnly)
 	float TrackMaxDrivingForce = 40000000.0f; // Assuming 40TM mass and 10m/s^2 acc
+
+protected:
+	virtual void BeginPlay() override;
+
+private:
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent * OtherComponent, FVector NormalImpulse, const FHitResult & Hit);
 };
