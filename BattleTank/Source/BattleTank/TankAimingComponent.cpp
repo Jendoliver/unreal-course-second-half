@@ -120,7 +120,7 @@ void UTankAimingComponent::MoveTurretTowards()
 	}
 	else 
 	{
-		Turret->Rotate(360 - YawRotation);
+		Turret->Rotate(-YawRotation);
 	}
 	
 }
