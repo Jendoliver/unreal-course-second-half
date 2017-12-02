@@ -8,6 +8,7 @@
 UENUM()
 enum class EFiringStatus : uint8
 { 
+	OutOfAmmo,
 	Reloading, 
 	Aiming,
 	Fixed 
@@ -32,14 +33,19 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Setup")
 	void Initialise(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet);
 
-	void AimAt(FVector HitLocation);
-
-	inline bool IsBarrelMoving() { return bBarrelMoving; }
-	inline void SetBarrelMoving(bool bBarrelMoving) { this->bBarrelMoving = bBarrelMoving; }
-
 	// Input binded function to fire (used by the player and the AI)
 	UFUNCTION(BlueprintCallable, Category = "Action")
 	void Fire();
+
+	void AimAt(FVector HitLocation);
+
+	inline EFiringStatus GetFiringStatus() const { return FiringStatus; }
+
+	inline bool IsBarrelMoving() const { return bBarrelMoving; }
+	inline void SetBarrelMoving(bool BarrelMoving) { bBarrelMoving = BarrelMoving; }
+
+	UFUNCTION(BlueprintCallable, Category = "Status")
+	int32 GetAmmo() const;
 
 protected:
 	// Whether the tank is ready to fire or not, used to draw the reticle
@@ -49,6 +55,10 @@ protected:
 private:
 	UTankBarrel* Barrel = nullptr;
 	UTankTurret* Turret = nullptr;
+
+	// The tank's amount of projectiles
+	UPROPERTY(EditAnywhere)
+	int32 Ammo = 10;
 
 	// The speed which the projectile is launch at
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
@@ -64,8 +74,8 @@ private:
 
 	float LastFireTime = 0.f;
 
-	void MoveBarrelTowards(FVector AimDirection);
-	void MoveTurretTowards(FVector AimDirection);
+	void MoveBarrelTowards();
+	void MoveTurretTowards();
 
 	FVector AimDirection;
 

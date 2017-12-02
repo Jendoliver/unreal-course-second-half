@@ -17,8 +17,8 @@ class BATTLETANK_API ATankAIController : public AAIController
 		APawn* PlayerPawn = nullptr;
 
 		// How close to the player can the AI tank drive
-		UPROPERTY(EditDefaultsOnly)
-		float AcceptanceRadius = 3000.f;
+		UPROPERTY(EditAnywhere)
+		float AcceptanceRadius = 5000.f;
 
 	protected:
 		virtual void BeginPlay() override;

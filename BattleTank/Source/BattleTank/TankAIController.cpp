@@ -24,7 +24,10 @@ void ATankAIController::Tick(float DeltaTime)
 	ControlledPawnAimingComponent->AimAt(PlayerPawn->GetActorLocation());
 
 	// Fire if ready
-	ControlledPawnAimingComponent->Fire();
+	if (ControlledPawnAimingComponent->GetFiringStatus() == EFiringStatus::Fixed)
+	{
+		ControlledPawnAimingComponent->Fire();
+	}
 }
 
 

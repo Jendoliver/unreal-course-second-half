@@ -21,7 +21,11 @@ void UTankAimingComponent::BeginPlay()
 void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	if (GetWorld()->GetTimeSeconds() - LastFireTime < ReloadTimeInSeconds)
+	if (Ammo == 0)
+	{
+		FiringStatus = EFiringStatus::OutOfAmmo;
+	}
+	else if (GetWorld()->GetTimeSeconds() - LastFireTime < ReloadTimeInSeconds)
 	{
 		FiringStatus = EFiringStatus::Reloading;
 	}
@@ -46,7 +50,7 @@ void UTankAimingComponent::Fire()
 {
 	if (!ensure(Barrel)) { return; }
 	
-	if (FiringStatus != EFiringStatus::Reloading)
+	if (FiringStatus != EFiringStatus::Reloading && FiringStatus != EFiringStatus::OutOfAmmo)
 	{
 		auto SpawnLocation = Barrel->GetSocketLocation(FName("Projectile"));
 		auto SpawnRotation = Barrel->GetSocketRotation(FName("Projectile"));
@@ -54,7 +58,13 @@ void UTankAimingComponent::Fire()
 		if (!ensure(Projectile)) { return; }
 		Projectile->LaunchProjectile(LaunchSpeed);
 		LastFireTime = GetWorld()->GetTimeSeconds();
+		Ammo--;
 	}
+}
+
+int32 UTankAimingComponent::GetAmmo() const
+{
+	return Ammo;
 }
 
 void UTankAimingComponent::AimAt(FVector HitLocation)
@@ -78,8 +88,8 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 	) 
 	{
 		AimDirection = OutLaunchVelocity.GetSafeNormal();
-		MoveBarrelTowards(AimDirection);
-		MoveTurretTowards(AimDirection);
+		MoveBarrelTowards();
+		MoveTurretTowards();
 	}
 	else
 	{
@@ -88,7 +98,7 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 	SetBarrelMoving(!Barrel->GetForwardVector().Equals(AimDirection, 0.05));
 }
 
-void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
+void UTankAimingComponent::MoveBarrelTowards()
 {
 	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
 	auto AimAsRotator = AimDirection.Rotation();
@@ -97,10 +107,20 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
 	Barrel->Elevate(DeltaRotator.Pitch);
 }
 
-void UTankAimingComponent::MoveTurretTowards(FVector AimDirection)
+void UTankAimingComponent::MoveTurretTowards()
 {
 	auto TurretRotator = Turret->GetForwardVector().Rotation();
 	auto AimAsRotator = AimDirection.Rotation();
 	auto DeltaRotator = AimAsRotator - TurretRotator;
-	Turret->Rotate(DeltaRotator.Yaw);
+	auto YawRotation = DeltaRotator.Yaw;
+
+	if (FMath::Abs(YawRotation) < 180) 
+	{
+		Turret->Rotate(YawRotation);
+	}
+	else 
+	{
+		Turret->Rotate(360 - YawRotation);
+	}
+	
 }
