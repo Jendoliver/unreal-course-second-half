@@ -21,5 +21,16 @@ protected:
 	virtual void BeginPlay() override;
 
 private:	
+
+	// The movement component for the projectile
+	UPROPERTY(VisibleAnywhere)
 	UProjectileMovementComponent* ProjectileMovementComponent = nullptr;
+
+	// The collision mesh for the projectile
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* CollisionMesh = nullptr;
+
+	// The particle system of the projectile explosion
+	UPROPERTY(VisibleAnywhere)
+	UParticleSystemComponent* LaunchBlast = nullptr;
 };

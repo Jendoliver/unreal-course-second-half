@@ -56,20 +56,20 @@ private:
 	UTankBarrel* Barrel = nullptr;
 	UTankTurret* Turret = nullptr;
 
+	// The projectile blueprint for this component
+	UPROPERTY(EditDefaultsOnly, Category = "Setup")
+	TSubclassOf<AProjectile> ProjectileBlueprint;
+
 	// The tank's amount of projectiles
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Firing")
 	int32 Ammo = 10;
 
 	// The speed which the projectile is launch at
 	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float LaunchSpeed = 4000.f;
 
-	// The projectile blueprint for this component
-	UPROPERTY(EditDefaultsOnly, Category = Setup)
-	TSubclassOf<AProjectile> ProjectileBlueprint;
-
 	// The time it takes for the tank to reload
-	UPROPERTY(EditDefaultsOnly, Category = Firing)
+	UPROPERTY(EditDefaultsOnly, Category = "Firing")
 	float ReloadTimeInSeconds = 3.f;
 
 	float LastFireTime = 0.f;
