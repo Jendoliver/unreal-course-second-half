@@ -21,6 +21,8 @@ protected:
 	virtual void BeginPlay() override;
 
 private:	
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent * HitComponent, AActor * OtherActor, UPrimitiveComponent * OtherComponent, FVector NormalImpulse, const FHitResult & Hit);
 
 	// The movement component for the projectile
 	UPROPERTY(VisibleAnywhere)
@@ -30,7 +32,15 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* CollisionMesh = nullptr;
 
-	// The particle system of the projectile explosion
+	// The explosion impulse force for the projectile
+	UPROPERTY(VisibleAnywhere)
+	URadialForceComponent* ExplosionImpulse = nullptr;
+
+	// The particle system of the projectile's launch
 	UPROPERTY(VisibleAnywhere)
 	UParticleSystemComponent* LaunchBlast = nullptr;
+
+	// The particle system of the projectile's impact
+	UPROPERTY(VisibleAnywhere)
+	UParticleSystemComponent* ImpactBlast = nullptr;
 };
