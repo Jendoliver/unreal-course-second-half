@@ -16,6 +16,8 @@ class BATTLETANK_API ATankAIController : public AAIController
 		UTankAimingComponent* ControlledPawnAimingComponent = nullptr;
 		APawn* PlayerPawn = nullptr;
 
+		virtual void SetPawn(APawn* InPawn) override;
+
 		// How close to the player can the AI tank drive
 		UPROPERTY(EditAnywhere)
 		float AcceptanceRadius = 5000.f;
@@ -23,4 +25,7 @@ class BATTLETANK_API ATankAIController : public AAIController
 	protected:
 		virtual void BeginPlay() override;
 		virtual void Tick(float DeltaTime) override;
+
+		UFUNCTION()
+		void OnDeath();
 };

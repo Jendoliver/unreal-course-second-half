@@ -35,7 +35,11 @@ class BATTLETANK_API ATankPlayerController : public APlayerController
 		UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
 		void FoundAimingComponent(UTankAimingComponent* AimComponentReference); // No need to implement, the parameter is the return type (lol)
 
+		void OnDeath();
+
 	public:
 		// Called every frame
 		virtual void Tick(float DeltaTime) override;
+
+		virtual void SetPawn(APawn * InPawn) override;
 };

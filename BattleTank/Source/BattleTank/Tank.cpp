@@ -10,6 +10,12 @@ ATank::ATank()
 	PrimaryActorTick.bCanEverTick = false;
 }
 
+void ATank::BeginPlay()
+{
+	Super::BeginPlay();
+	CurrentHealth = StartingHealth;
+}
+
 float ATank::GetHealthPercent() const
 {
 	return (float)CurrentHealth / (float)StartingHealth;
@@ -33,7 +39,7 @@ float ATank::TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, cl
 		// If the damage depletes our health set our lifespan to zero - which will destroy the actor  
 		if (CurrentHealth <= 0)
 		{
-			SetLifeSpan(0.001f);
+			OnDeath.Broadcast();
 		}
 	}
 	UE_LOG(LogTemp, Warning, TEXT("Damage: %d, CurrentHealth: %d"), DamagePoints, CurrentHealth);
