@@ -91,10 +91,6 @@ void UTankAimingComponent::AimAt(FVector HitLocation)
 		MoveBarrelTowards();
 		MoveTurretTowards();
 	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("NO SOLUTION"));
-	}
 	SetBarrelMoving(!Barrel->GetForwardVector().Equals(AimDirection, 0.05));
 }
 

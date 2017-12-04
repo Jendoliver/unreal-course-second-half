@@ -10,3 +10,28 @@ ATank::ATank()
 	PrimaryActorTick.bCanEverTick = false;
 }
 
+float ATank::TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, class AActor* DamageCauser)
+{
+	const float ActualDamage = Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+	int32 DamagePoints = FPlatformMath::RoundToInt(ActualDamage);
+	if (DamagePoints > 0)
+	{
+		if (DamagePoints < CurrentHealth)
+		{
+			CurrentHealth -= DamagePoints;
+		}
+		else
+		{
+			CurrentHealth = 0;
+		}
+
+		// If the damage depletes our health set our lifespan to zero - which will destroy the actor  
+		if (CurrentHealth <= 0)
+		{
+			SetLifeSpan(0.001f);
+		}
+	}
+	UE_LOG(LogTemp, Warning, TEXT("Damage: %d, CurrentHealth: %d"), DamagePoints, CurrentHealth);
+	return DamagePoints;
+}
+
