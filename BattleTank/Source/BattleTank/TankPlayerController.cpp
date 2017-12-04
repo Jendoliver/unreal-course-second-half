@@ -79,7 +79,7 @@ bool ATankPlayerController::GetLookVectorHitLocation(FVector LookDirection, FVec
 	FVector StartLocation = PlayerCameraManager->GetCameraLocation(); // Very important not to take the tank as the start, since it's the camera!
 	FVector EndLocation = StartLocation + LookDirection * LineTraceRange;
 
-	if (GetWorld()->LineTraceSingleByChannel(OutHitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility))
+	if (GetWorld()->LineTraceSingleByChannel(OutHitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Camera))
 	{
 		OutHitLocation = OutHitResult.Location;
 		return true;

@@ -35,6 +35,7 @@ class BATTLETANK_API ATankPlayerController : public APlayerController
 		UFUNCTION(BlueprintImplementableEvent, Category = "Setup")
 		void FoundAimingComponent(UTankAimingComponent* AimComponentReference); // No need to implement, the parameter is the return type (lol)
 
+		UFUNCTION()
 		void OnDeath();
 
 	public:
